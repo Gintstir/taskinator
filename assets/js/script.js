@@ -134,7 +134,7 @@ var deleteTask = function(taskId) {
     //loop through current tasks
     for (var i = 0; i < tasks.length; i++) {
         //if tasks[id].id doesnt match the value of taskId, let's keep that task and push it into the new array
-        if (tasks[id].id !== parseInt(taskId)) {
+        if (tasks[i].id !== parseInt(taskId)) {
             updatedTaskArr.push(tasks[i]);
         }
     }
@@ -309,11 +309,53 @@ var dragLeaveHandler = function(event) {
     }
 };
 //----------------------------------------------------------------
+//--------------------END TASK HANDLER SECTION--------------------
+//----------------------------------------------------------------
+
+//----------------------------------------------------------------
 var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 };
+//----------------------------------------------------------------
+//Gets task items from localStorage.
 
 
+
+
+var loadTasks = function() {
+    var storedTasks = localStorage.getItem("tasks")
+    console.log(storedTasks);
+    //convert tasks from string format back into array of objects
+    if(!storedTasks) {
+        tasks = [];
+        return false; 
+    }
+
+        tasks = JSON.parse(storedTasks);
+
+    //Iterates through a tasks array and creates task elements on the page from it.
+    for (i = 0; i < tasks.length; i++) {
+        console.log(tasks[i]);    
+        tasks[i].id = taskIdCounter;    
+        console.log(tasks[i]);
+    }
+    var listItemEl = document.createElement("li");
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        listItemEl.setAttribute("draggable", "true");
+        console.log(listItemEl);
+        
+    var taskInfoEl = document.createElement("div");
+        taskInfoEl = className = "task-info";
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        taskInfoEl.appendChild(listItemEl);
+
+    var taskActionsEl = createTaskActions(tasks[i].id);
+        taskActionsEl.appendChild(listItemEl);
+        console.log(listItemEl);
+};
+
+loadTasks();
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -332,3 +374,4 @@ pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
 
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
+
